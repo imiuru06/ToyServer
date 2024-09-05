@@ -1,13 +1,12 @@
-# src/file_merger.py
-
 import os
 import json
 import yaml
+from flask import url_for
 
 class FileMerger:
     def __init__(self):
-        self.extension_list = ['.py', '.json', '.env']  # Default extensions to merge
-        self.structure_extensions = ['.json', '.env']  # Extensions for structure info only
+        self.extension_list = ['.py', '.json', '.env']
+        self.structure_extensions = ['.json', '.env']
         self.output_file = ""
         self.source_folder = ""
         self.is_running = False
@@ -44,7 +43,6 @@ class FileMerger:
                         file_path = os.path.join(root, filename)
                         relative_path = os.path.relpath(file_path, self.source_folder)
                         if filename.endswith('.json'):
-                            # For JSON files, include structure (keys) and content
                             with open(file_path, 'r', encoding='utf-8') as infile:
                                 structure_info = json.load(infile)
                                 folder_data["files"].append({
@@ -52,7 +50,6 @@ class FileMerger:
                                     "content": f"'''구조정보 {relative_path}'''\n내부 구조(키)\n" + "\n".join(structure_info.keys()) + "\n\n" + json.dumps(structure_info, indent=4)
                                 })
                         elif filename.endswith('.env'):
-                            # For .env files, include only structure (keys)
                             with open(file_path, 'r', encoding='utf-8') as infile:
                                 env_content = infile.read()
                                 env_keys = [line.split('=')[0] for line in env_content.splitlines() if '=' in line]
@@ -61,7 +58,6 @@ class FileMerger:
                                     "content": f"'''구조정보 {relative_path}'''\n내부 구조(키)\n" + "\n".join(env_keys)
                                 })
                         else:
-                            # For other files (e.g., .py), include file content
                             with open(file_path, 'r', encoding='utf-8') as infile:
                                 folder_data["files"].append({
                                     "name": filename,
@@ -74,7 +70,9 @@ class FileMerger:
             with open(self.output_file, 'w', encoding='utf-8') as outfile:
                 yaml.dump(project_data, outfile, allow_unicode=True, sort_keys=False)
                 
-            return {"status": "success", "message": "Merge completed successfully."}
+            # Assuming the server is configured to serve files from the current directory
+            file_url = url_for('static', filename=os.path.basename(self.output_file), _external=True)
+            return {"status": "success", "file_url": file_url}
         except Exception as e:
             return {"status": "error", "message": str(e)}
         finally:

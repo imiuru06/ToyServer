@@ -1,7 +1,0 @@
-{
-    "url": "http://127.0.0.1:5000/merge_files",
-    "data": {
-        "source_folder": "C:\\Users\\noah\\Documents\\Codes\\pyPrompter",
-        "output_file": "C:\\Users\\noah\\Documents\\Codes\\project_structure.yaml"
-    }
-}

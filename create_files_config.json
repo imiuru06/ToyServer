@@ -1,7 +1,0 @@
-{
-    "url": "http://127.0.0.1:5000/create_files",
-    "data": {
-        "file_path": "",
-        "yaml_content": "project_name: test_project\nfolders:\n  - name: src\n    files:\n      - name: main.py\n        content: |\n          print(\"Hello, World!\")\n      - name: utils.py\n        content: |\n          def add(a, b):\n              return a + b\n  - name: docs\n    files:\n      - name: README.md\n        content: |\n          # Test Project\n\n          This is a test project to demonstrate ProjectGenerator functionality."
-    }
-}
