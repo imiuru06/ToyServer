@@ -1,0 +1,18 @@
+project_name: test_project
+folders:
+  - name: src
+    files:
+      - name: main.py
+        content: |
+          print("Hello, World!")
+      - name: utils.py
+        content: |
+          def add(a, b):
+              return a + b
+  - name: docs
+    files:
+      - name: README.md
+        content: |
+          # Test Project
+
+          This is a test project to demonstrate ProjectGenerator functionality.

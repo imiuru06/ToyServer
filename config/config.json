@@ -1,0 +1,14 @@
+{
+    "model_name": "gpt-4o",
+    "provider": "azure",
+    "extensions": [
+        ".json",
+        ".py",
+        ".env",
+        ".yaml"
+    ],
+    "structure_extensions": [
+        ".json",
+        ".env"
+    ]
+}

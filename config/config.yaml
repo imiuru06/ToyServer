@@ -1,0 +1,5 @@
+# 모델 이름을 지정합니다.
+model_name: "gpt-3.5-turbo"  # 사용할 LLM 모델의 이름
+
+# LLM 서비스 제공자를 지정합니다. 선택할 수 있는 값은 "openai" 또는 "azure"입니다.
+provider: "azure"  # LLM 서비스 제공자
