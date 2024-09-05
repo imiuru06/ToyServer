@@ -11,8 +11,8 @@ class FileMerger:
         self.source_folder = ""
         self.is_running = False
 
-    def load_config(self):
-        config_file = "config/config.json"
+    def load_config(self, base_path):
+        config_file = os.path.join(base_path, "config/config.json")
         if os.path.exists(config_file):
             with open(config_file, 'r', encoding='utf-8') as config:
                 config_data = json.load(config)
@@ -21,12 +21,12 @@ class FileMerger:
         else:
             self.save_config()
 
-    def save_config(self):
+    def save_config(self, base_path):
         config_data = {
             "extensions": self.extension_list,
             "structure_extensions": self.structure_extensions
         }
-        with open("config/config.json", 'w', encoding='utf-8') as config:
+        with open(os.path.join(base_path, "config/config.json"), 'w', encoding='utf-8') as config:
             json.dump(config_data, config, ensure_ascii=False, indent=4)
 
     def merge_files(self, source_folder, output_file):
@@ -34,7 +34,7 @@ class FileMerger:
         self.output_file = output_file
         self.is_running = True
         try:
-            project_data = {"project_name": "test_project", "folders": []}
+            project_data = {"project_name": "new_project", "folders": []}
             
             for root, dirs, files in os.walk(self.source_folder):
                 folder_data = {"name": os.path.relpath(root, self.source_folder), "files": []}

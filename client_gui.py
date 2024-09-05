@@ -3,12 +3,14 @@ from tkinter import filedialog, messagebox, scrolledtext
 import requests
 import json
 import webbrowser
+import os
 
 class ClientApp:
     def __init__(self, root):
         self.root = root
         self.root.title("Client GUI")
-        self.config = self.load_config('config_client.json')  # config 파일 로드
+        self.base_path = os.path.dirname(os.path.abspath(__file__))
+        self.config = self.load_config(os.path.join(self.base_path, "config_client.json"))  # config 파일 로드
         self.create_widgets()
         self.show_create_project_frame()
 

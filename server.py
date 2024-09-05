@@ -9,8 +9,9 @@ import shutil
 
 app = Flask(__name__)
 
+base_path = os.path.dirname(os.path.abspath(__file__))
 file_merger = FileMerger()
-file_merger.load_config()
+file_merger.load_config(base_path)
 
 # Define the directories
 UPLOAD_FOLDER = 'uploads'
