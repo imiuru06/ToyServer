@@ -1,6 +1,7 @@
 from flask import Flask, request, Response, jsonify, send_from_directory
 from src.file_merger import FileMerger
 from src.file_generator import ProjectCreator
+from src.converter import json_to_markdown, yaml_to_json  # Import converter functions
 import yaml
 import json
 import os
@@ -30,13 +31,13 @@ def merge():
     
     if not source_folder:
         return Response(
-            "Source folder is required.", 
+            "Source folder is required.",
             status=400
         )
     
     if file_merger.is_running:
         return Response(
-            "Merge is already in progress.", 
+            "Merge is already in progress.",
             status=400
         )
     
@@ -78,6 +79,44 @@ def create_files():
     except Exception as e:
         return jsonify({"status": "error", "message": str(e)}), 500
 
+@app.route('/convert_json_to_markdown', methods=['POST'])
+def convert_json_to_markdown():
+    try:
+        data = request.json
+        json_data = data.get('json_data')
+        
+        if not json_data:
+            return jsonify({"status": "error", "message": "JSON data is required."}), 400
+        
+        markdown_content = json_to_markdown(json_data)
+        
+        # Save Markdown content to a file
+        markdown_file_path = os.path.join(app.config['UPLOAD_FOLDER'], 'api_documentation.md')
+        with open(markdown_file_path, 'w', encoding='utf-8') as file:
+            file.write(markdown_content)
+        
+        markdown_file_url = request.host_url + 'uploads/' + 'api_documentation.md'
+        return jsonify({"status": "success", "file_url": markdown_file_url})
+    
+    except Exception as e:
+        return jsonify({"status": "error", "message": str(e)}), 500
+
+@app.route('/convert_yaml_to_json', methods=['POST'])
+def convert_yaml_to_json():
+    try:
+        data = request.json
+        yaml_file = data.get('yaml_file')
+        json_file = os.path.join(app.config['UPLOAD_FOLDER'], 'converted.json')
+        
+        if not yaml_file:
+            return jsonify({"status": "error", "message": "YAML file path is required."}), 400
+        
+        yaml_file_path = os.path.join(app.config['UPLOAD_FOLDER'], yaml_file)
+        yaml_to_json(yaml_file_path, json_file)
+        
+        json_file_url = request.host_url + 'uploads/' + 'converted.json'
+        return jsonify({"status": "success", "file_url": json_file_url})
+    
     except Exception as e:
         return jsonify({"status": "error", "message": str(e)}), 500
 
